@@ -72,8 +72,8 @@ face = BRepBuilderAPI_MakeFace(mkWire.Wire())
 # поворациваем профель относительно однрй из своих сторон, ось
 # вращения указана вектором, поворачиваем на 180 градусов
 
-sol1 = BRepPrimAPI_MakeRevol(face.Face(), gp_Ax1(gp_Pnt(0, 0, 0),
-                                                 gp_Dir(1, 0, 0)), 2 * math.pi)
+solid_of_revol = BRepPrimAPI_MakeRevol(face.Face(), gp_Ax1(gp_Pnt(0, 0, 0),
+                                                           gp_Dir(1, 0, 0)), 2 * math.pi)
 # Создаём вырез
 # Рисуем профиль и вытягиваем его
 R = D / 2
@@ -95,12 +95,12 @@ wire = BRepBuilderAPI_MakeWire(edge.Edge())
 mkWire.Add(wire.Wire())
 face = BRepBuilderAPI_MakeFace(mkWire.Wire())
 
-sol2 = BRepPrimAPI_MakePrism(face.Face(), gp_Vec(100, 0, 0))
+extruded_solid = BRepPrimAPI_MakePrism(face.Face(), gp_Vec(100, 0, 0))
 
-sol3 = BRepAlgo_Cut(sol1.Shape(), sol2.Shape())
+result_solid = BRepAlgo_Cut(solid_of_revol.Shape(), extruded_solid.Shape())
 # делаем крепление
 Z = 14 * math.cos(math.pi / 6)
 Y = 14 * math.sin(math.pi / 6)
 # производим вырез 7 отверстий в резце
-shape = make_cut_cylinder(sol3, [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100), (0, Y, -Z, 4, 100),
-                                 (0, -Y, -Z, 4, 100), (0, Y, Z, 4, 100), (0, -Y, Z, 4, 100)])
+shape = make_cut_cylinder(result_solid, [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100), (0, Y, -Z, 4, 100),
+                                         (0, -Y, -Z, 4, 100), (0, Y, Z, 4, 100), (0, -Y, Z, 4, 100)])
