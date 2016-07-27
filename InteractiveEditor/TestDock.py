@@ -1,4 +1,7 @@
 import sys
+import code
+from io import StringIO
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -14,6 +17,7 @@ class dockdemo(QMainWindow):
       file.addAction("quit")
 		
       self.items = QDockWidget("Dockable", self)
+      #self.console = InteractiveConsole(self)
       self.listWidget = QListWidget()
       self.listWidget.addItem("item1")
       self.listWidget.addItem("item2")
