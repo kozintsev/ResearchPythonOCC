@@ -6,13 +6,13 @@ def interpret():
 	import code
 	from io import StringIO
 
-	from PyQt4.QtCore import QObject, QString, pyqtSignal
-	from PyQt4.QtGui import QWidget, QGridLayout, QTextEdit, QLineEdit, QLabel
+	from PyQt4.QtCore import QObject, pyqtSignal
+	from PyQt4.QtGui import QApplication, QWidget, QGridLayout, QTextEdit, QLineEdit, QLabel
 
 	# TODO: colour text based on stderr/stdout
 	#       print input text alongside output (different colour?)
 	class Interpreter(QObject, code.InteractiveConsole):
-		output = pyqtSignal(QString)
+		output = pyqtSignal(str)
 
 		def __init__(self):
 			QObject.__init__(self)
@@ -35,7 +35,7 @@ def interpret():
 			self.output.emit(self.out.getvalue())
 			return result
 
-
+	app = QApplication(sys.argv)
 	wid = QWidget()
 	layout = QGridLayout(wid)
 
@@ -72,3 +72,6 @@ def interpret():
 
 	wid.show()
 	sys.exit(app.exec_())
+
+if __name__ == '__main__':
+   interpret()
