@@ -27,9 +27,8 @@ class ManiWindow(QMainWindow):
         self.connect(_new, SIGNAL("triggered()"), self.my_process)
         file.addAction(_new)
 
-
         self.statusBar()
-
+        
         self.dock = QDockWidget("Python Shell", self)
         self.pythonshell = internalshell.InternalShell(self.dock, namespace=globals(), commands=[])
         self.dock.setWidget(self.pythonshell)
@@ -39,12 +38,18 @@ class ManiWindow(QMainWindow):
         self.setLayout(layout)
         self.setWindowTitle("Dock demo")
 
+    def __add_line(self, str):
+        postfix = ''
+        if str.rfind('\n') == -1:
+            postfix = '\n'
+        self.pythonshell.insert_text(str + postfix)
+        self.pythonshell.run_command(str)
+
     def my_process(self):
         self.setWindowTitle("Hello!")
         cmd = "print('hello')"
-        self.pythonshell.insert_text(cmd)
-        self.pythonshell.new_prompt('')
-        self.pythonshell.run_command(cmd)
+        self.__add_line(cmd)
+    
 
 
 def main():
