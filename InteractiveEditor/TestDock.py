@@ -12,10 +12,17 @@ class ManiWindow(QMainWindow):
 		
       layout = QHBoxLayout()
       bar = self.menuBar()
-      file = bar.addMenu("File")
+      file = bar.addMenu("&File")
       file.addAction("New")
-      file.addAction("save")
-      file.addAction("quit")
+      # file.addAction("Save")
+
+      exit = QAction(QIcon('icons/exit.png'), '&Exit', self)
+      exit.setShortcut('Ctrl+Q')
+      exit.setStatusTip('Exit application')
+      self.connect(exit, SIGNAL('triggered()'), SLOT('close()'))
+      file.addAction(exit)
+
+      self.statusBar()
 		
       self.dock = QDockWidget("Python Shell", self)
       self.pythonshell = internalshell.InternalShell(self.dock, namespace=globals(),commands=[])
