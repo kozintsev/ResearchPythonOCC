@@ -4,10 +4,11 @@ from io import StringIO
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from spyderlib.widgets import internalshell
 
-class dockdemo(QMainWindow):
+class ManiWindow(QMainWindow):
    def __init__(self, parent = None):
-      super(dockdemo, self).__init__(parent)
+      super(ManiWindow, self).__init__(parent)
 		
       layout = QHBoxLayout()
       bar = self.menuBar()
@@ -16,23 +17,18 @@ class dockdemo(QMainWindow):
       file.addAction("save")
       file.addAction("quit")
 		
-      self.items = QDockWidget("Dockable", self)
-      #self.console = InteractiveConsole(self)
-      self.listWidget = QListWidget()
-      self.listWidget.addItem("item1")
-      self.listWidget.addItem("item2")
-      self.listWidget.addItem("item3")
-		
-      self.items.setWidget(self.listWidget)
-      self.items.setFloating(False)
+      self.dock = QDockWidget("Python Shell", self)
+      self.pythonshell = internalshell.InternalShell(self.dock, namespace=globals(),commands=[])
+      self.dock.setWidget(self.pythonshell)
+      self.dock.setFloating(False)
       self.setCentralWidget(QTextEdit())
-      self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+      self.addDockWidget(Qt.RightDockWidgetArea, self.dock)
       self.setLayout(layout)
       self.setWindowTitle("Dock demo")
 		
 def main():
    app = QApplication(sys.argv)
-   ex = dockdemo()
+   ex = ManiWindow()
    ex.show()
    sys.exit(app.exec_())
 	
