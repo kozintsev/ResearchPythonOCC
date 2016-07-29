@@ -16,16 +16,17 @@ class ManiWindow(QMainWindow):
         file = bar.addMenu("&File")
         # file.addAction("Save")
 
+        _new = QAction(QIcon('icons/exit.png'), '&New', self)
+        _new.setStatusTip("New application")
+        self.connect(_new, SIGNAL("triggered()"), self.my_process)
+        file.addAction(_new)
+
         _exit = QAction(QIcon('icons/exit.png'), '&Exit', self)
         _exit.setShortcut('Ctrl+Q')
         _exit.setStatusTip('Exit application')
         self.connect(_exit, SIGNAL('triggered()'), SLOT('close()'))
         file.addAction(_exit)
 
-        _new = QAction(QIcon('icons/exit.png'), '&New', self)
-        _new.setStatusTip("New application")
-        self.connect(_new, SIGNAL("triggered()"), self.my_process)
-        file.addAction(_new)
 
         self.statusBar()
         
