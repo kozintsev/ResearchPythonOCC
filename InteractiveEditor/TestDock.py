@@ -4,7 +4,6 @@ from io import StringIO
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from PyQt4.QtOpenGL import *
 from spyderlib.widgets import internalshell
 
 from OCC import VERSION
@@ -12,13 +11,15 @@ from OCC.Display.backend import load_backend, load_pyqt4, PYQT4
 load_backend(PYQT4)
 load_pyqt4()
 from OCC.Display.qtDisplay import *
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 class ManiWindow(QMainWindow):
     def __init__(self, parent=None):
         super(ManiWindow, self).__init__(parent)
         self.canva = qtViewer3d(self)
-        self.canva.InitDriver()
         self.setWindowTitle("pythonOCC-%s 3d viewer" % VERSION)
+        self.canva.InitDriver()
+        self.display = self.canva._display
 
         bar = self.menuBar()
         file = bar.addMenu("&File")
@@ -51,7 +52,8 @@ class ManiWindow(QMainWindow):
         self.pythonshell.run_command(str)
 
     def my_process(self):
-        self.setWindowTitle("Hello!")
+        my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()
+        self.display.DisplayShape(my_box, update=True)
         cmd = "print('hello')"
         self.__add_line(cmd)
     
@@ -59,8 +61,8 @@ class ManiWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    ex = ManiWindow()
-    ex.show()
+    win = ManiWindow()
+    win.show()
     sys.exit(app.exec_())
 
 
