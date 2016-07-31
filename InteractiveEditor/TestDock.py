@@ -4,17 +4,24 @@ from io import StringIO
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from PyQt4.QtOpenGL import *
 from spyderlib.widgets import internalshell
 
+from OCC import VERSION
+from OCC.Display.backend import load_backend, load_pyqt4, PYQT4
+load_backend(PYQT4)
+load_pyqt4()
+from OCC.Display.qtDisplay import *
 
 class ManiWindow(QMainWindow):
     def __init__(self, parent=None):
         super(ManiWindow, self).__init__(parent)
+        self.canva = qtViewer3d(self)
+        self.canva.InitDriver()
+        self.setWindowTitle("pythonOCC-%s 3d viewer" % VERSION)
 
-        layout = QHBoxLayout()
         bar = self.menuBar()
         file = bar.addMenu("&File")
-        # file.addAction("Save")
 
         _new = QAction(QIcon('icons/exit.png'), '&New', self)
         _new.setStatusTip("New application")
@@ -26,18 +33,15 @@ class ManiWindow(QMainWindow):
         _exit.setStatusTip('Exit application')
         self.connect(_exit, SIGNAL('triggered()'), SLOT('close()'))
         file.addAction(_exit)
-
-
         self.statusBar()
         
         self.dock = QDockWidget("Python Shell", self)
         self.pythonshell = internalshell.InternalShell(self.dock, namespace=globals(), commands=[])
         self.dock.setWidget(self.pythonshell)
         self.dock.setFloating(False)
-        self.setCentralWidget(QTextEdit())
         self.addDockWidget(Qt.RightDockWidgetArea, self.dock)
-        self.setLayout(layout)
-        self.setWindowTitle("Dock demo")
+        self.setCentralWidget(self.canva)
+        self.resize(800, 600)
 
     def __add_line(self, str):
         postfix = ''
