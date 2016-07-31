@@ -38,6 +38,8 @@ class ManiWindow(QMainWindow):
         
         self.dock = QDockWidget("Python Shell", self)
         self.pythonshell = internalshell.InternalShell(self.dock, namespace=globals(), commands=[])
+        self.pythonshell.interpreter.locals["self"] = self
+        self.pythonshell.interpreter.locals["display"] = self.display
         self.dock.setWidget(self.pythonshell)
         self.dock.setFloating(False)
         self.addDockWidget(Qt.RightDockWidgetArea, self.dock)
@@ -52,9 +54,13 @@ class ManiWindow(QMainWindow):
         self.pythonshell.run_command(str)
 
     def my_process(self):
-        my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()
-        self.display.DisplayShape(my_box, update=True)
-        cmd = "print('hello')"
+        # my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()
+        # self.display.DisplayShape(my_box, update=True)
+        # cmd = "print('hello')"
+        # self.__add_line(cmd)
+        cmd = "my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()"
+        self.__add_line(cmd)
+        cmd = "self.display.DisplayShape(my_box, update=True)"
         self.__add_line(cmd)
     
 
