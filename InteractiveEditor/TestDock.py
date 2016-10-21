@@ -4,7 +4,7 @@ from io import StringIO
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from spyderlib.widgets import internalshell
+from spyder.widgets import internalshell
 
 from OCC import VERSION
 from OCC.Display.backend import load_backend, load_pyqt4, PYQT4
