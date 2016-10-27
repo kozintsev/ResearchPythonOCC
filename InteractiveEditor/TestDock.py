@@ -1,7 +1,3 @@
-import sys
-import code
-from io import StringIO
-
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from spyderlib.widgets import internalshell
@@ -11,7 +7,6 @@ from OCC.Display.backend import load_backend, load_pyqt4, PYQT4
 load_backend(PYQT4)
 load_pyqt4()
 from OCC.Display.qtDisplay import *
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 class ManiWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -58,6 +53,8 @@ class ManiWindow(QMainWindow):
         # self.display.DisplayShape(my_box, update=True)
         # cmd = "print('hello')"
         # self.__add_line(cmd)
+        cmd = "from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox"
+        self.__add_line(cmd)
         cmd = "my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()"
         self.__add_line(cmd)
         cmd = "self.display.DisplayShape(my_box, update=True)"
