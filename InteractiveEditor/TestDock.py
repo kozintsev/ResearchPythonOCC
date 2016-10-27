@@ -1,20 +1,22 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from spyderlib.widgets import internalshell
+from spyder.widgets import internalshell
 
 from OCC import VERSION
 from OCC.Display.backend import load_backend, load_pyqt4, PYQT4
+
 load_backend(PYQT4)
 load_pyqt4()
 from OCC.Display.qtDisplay import *
 
+
 class ManiWindow(QMainWindow):
     def __init__(self, parent=None):
         super(ManiWindow, self).__init__(parent)
-        self.canva = qtViewer3d(self)
+        self.canvas = qtViewer3d(self)
         self.setWindowTitle("pythonOCC-%s 3d viewer" % VERSION)
-        self.canva.InitDriver()
-        self.display = self.canva._display
+        self.canvas.InitDriver()
+        self.display = self.canvas._display
 
         bar = self.menuBar()
         file = bar.addMenu("&File")
@@ -30,36 +32,34 @@ class ManiWindow(QMainWindow):
         self.connect(_exit, SIGNAL('triggered()'), SLOT('close()'))
         file.addAction(_exit)
         self.statusBar()
-        
+
         self.dock = QDockWidget("Python Shell", self)
-        self.pythonshell = internalshell.InternalShell(self.dock, namespace=globals(), commands=[])
-        self.pythonshell.interpreter.locals["self"] = self
-        self.pythonshell.interpreter.locals["display"] = self.display
-        self.dock.setWidget(self.pythonshell)
+        self.python_shell = internalshell.InternalShell(self.dock, namespace=globals(), commands=[])
+        self.python_shell.interpreter.locals["self"] = self
+        self.python_shell.interpreter.locals["display"] = self.display
+        self.dock.setWidget(self.python_shell)
         self.dock.setFloating(False)
         self.addDockWidget(Qt.RightDockWidgetArea, self.dock)
-        self.setCentralWidget(self.canva)
+        self.setCentralWidget(self.canvas)
         self.resize(800, 600)
 
-    def __add_line(self, str):
+    def __add_line(self, command):
         postfix = ''
-        if str.rfind('\n') == -1:
+        if command.rfind('\n') == -1:
             postfix = '\n'
-        self.pythonshell.insert_text(str + postfix)
-        self.pythonshell.run_command(str)
+        self.python_shell.insert_text(command + postfix, at_end=True)
+        self.python_shell.keyPressEvent()
+        #self.python_shell.on_enter(command)
+        #self.python_shell.flush()
+
 
     def my_process(self):
-        # my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()
-        # self.display.DisplayShape(my_box, update=True)
-        # cmd = "print('hello')"
-        # self.__add_line(cmd)
         cmd = "from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox"
         self.__add_line(cmd)
         cmd = "my_box = BRepPrimAPI_MakeBox(10., 20., 30.).Shape()"
         self.__add_line(cmd)
         cmd = "self.display.DisplayShape(my_box, update=True)"
         self.__add_line(cmd)
-    
 
 
 def main():
