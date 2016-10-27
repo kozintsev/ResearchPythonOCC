@@ -1,3 +1,4 @@
+# coding=utf-8
 import math
 import mymath
 
@@ -27,17 +28,6 @@ def points_to_bspline(pnts):
     pnts = point_list_to_TColgp_Array1OfPnt(pnts)
     crv = GeomAPI_PointsToBSpline(pnts)
     return crv.Curve()
-
-
-def make_curve(points):
-    """
-    Построение кривой по точкам
-    :param points:
-    :return:
-    """
-    curve = points_to_bspline(points)
-    edge = BRepBuilderAPI_MakeEdge(curve)
-    return edge
 
 
 def make_cut_cylinder(share, points):
@@ -76,7 +66,9 @@ xt4 = mymath.math_rez(D, r_min, 25, gamma, alpha)
 xt5 = mymath.math_rez(D, r_min, 28.5, gamma, alpha)
 xt6 = mymath.math_rez(D, r_min, 35, gamma, alpha)
 
-edge = make_curve([gp_Pnt(20, xt2, 0), gp_Pnt(27, xt3, 0), gp_Pnt(39.4, xt4, 0), gp_Pnt(52.4, xt5, 0), gp_Pnt(60, xt6, 0)])
+curve = points_to_bspline(
+    [gp_Pnt(20, xt2, 0), gp_Pnt(27, xt3, 0), gp_Pnt(39.4, xt4, 0), gp_Pnt(52.4, xt5, 0), gp_Pnt(60, xt6, 0)])
+edge = BRepBuilderAPI_MakeEdge(curve)
 wire = BRepBuilderAPI_MakeWire(edge.Edge())
 mkWire.Add(wire.Wire())
 
@@ -106,15 +98,13 @@ edge = BRepBuilderAPI_MakeEdge(gp_Pnt(100, 0, 0), gp_Pnt(0, 0, 0))
 wire = BRepBuilderAPI_MakeWire(edge.Edge())
 mkWire.Add(wire.Wire())
 # делаем из контура фейс
-
 face = BRepBuilderAPI_MakeFace(mkWire.Wire())
 # поворациваем профель относительно однрй из своих сторон, ось
 # вращения указана вектором, поворачиваем на 180 градусов
-
 solid_of_revol = BRepPrimAPI_MakeRevol(face.Face(), gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0)), 2 * math.pi)
 # Создаём вырез
 # Рисуем профиль и вытягиваем его
-R = D / 2
+R = 5 + D / 2
 b_max = 20
 y = - (b_max * math.tan(gamma))
 z = -(R - b_max)

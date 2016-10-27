@@ -1,4 +1,6 @@
+# coding=utf-8
 import math
+
 
 def math_rez(D, r_min, angle, gamma, alpha):
     """
@@ -12,7 +14,7 @@ def math_rez(D, r_min, angle, gamma, alpha):
     """
     h_d = r_min * math.sin(gamma)
     h_p = (D / 2) * math.sin(gamma + alpha)
-    L = r_min * math.cosh(gamma) + (D / 2) * math.cos(gamma + alpha)
-    A = math.sqrt((angle ** 2) - (h_d ** 2))
-    R = math.sqrt((h_p ** 2) + ((L - A) ** 2))
-    return R
+    l = r_min * math.cosh(gamma) + (D / 2) * math.cos(gamma + alpha)
+    a = math.sqrt((angle ** 2) - (h_d ** 2))
+    r = math.sqrt((h_p ** 2) + ((l - a) ** 2))
+    return r
