@@ -49,9 +49,8 @@ class ManiWindow(QMainWindow):
             postfix = '\n'
         self.python_shell.insert_text(command + postfix, at_end=True)
         self.python_shell.keyPressEvent()
-        #self.python_shell.on_enter(command)
-        #self.python_shell.flush()
-
+        # self.python_shell.on_enter(command)
+        # self.python_shell.flush()
 
     def my_process(self):
         cmd = "from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox"
