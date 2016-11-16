@@ -13,9 +13,9 @@ from OCC.Display.qtDisplay import *
 class ManiWindow(QMainWindow):
     def __init__(self, parent=None):
         super(ManiWindow, self).__init__(parent)
-        # self.canvas = qtViewer3d(self)
+        self.canvas = qtViewer3d(self)
         self.setWindowTitle("pythonOCC-%s 3d viewer" % VERSION)
-        # self.canvas.InitDriver()
+        self.canvas.InitDriver()
 
         bar = self.menuBar()
         file = bar.addMenu("&File")
@@ -32,6 +32,8 @@ class ManiWindow(QMainWindow):
         _exit.triggered.connect(qApp.quit)
         file.addAction(_exit)
         self.statusBar()
+        self.setCentralWidget(self.canvas)
+        self.resize(800, 600)
 
     def my_process(self):
         print('hello')
