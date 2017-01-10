@@ -14,7 +14,7 @@ class ManiWindow(QMainWindow):
     def __init__(self, parent=None):
         super(ManiWindow, self).__init__(parent)
         self.canvas = qtViewer3d(self)
-        self.setWindowTitle("pythonOCC-%s 3d viewer" % VERSION)
+        # self.setWindowTitle("pythonOCC-%s 3d viewer" % VERSION)
         self.canvas.InitDriver()
 
         bar = self.menuBar()

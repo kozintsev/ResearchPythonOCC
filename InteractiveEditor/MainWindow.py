@@ -1,6 +1,6 @@
 import sys
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtGui import
+from PyQt4.QtGui import QDockWidget
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
@@ -27,7 +27,7 @@ class MainWindow(QtGui.QMainWindow):
         toolbar.addAction(exit)
         self.createDockWindows()
         
-    def createDockWindows():
+    def createDockWindows(self):
         dock = QDockWidget('Customers', self)
             
 

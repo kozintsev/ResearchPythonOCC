@@ -25,8 +25,8 @@ def points_to_bspline(pnts):
     Построение сплайна по точками
     :type pnts: object
     """
-    pnts = point_list_to_TColgp_Array1OfPnt(pnts)
-    crv = GeomAPI_PointsToBSpline(pnts)
+    pts = point_list_to_TColgp_Array1OfPnt(pnts)
+    crv = GeomAPI_PointsToBSpline(pts)
     return crv.Curve()
 
 
