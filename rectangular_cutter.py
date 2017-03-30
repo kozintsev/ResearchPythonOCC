@@ -14,7 +14,7 @@ display, start_display, add_menu, add_function_to_menu = init_display()
 
 
 def point_list_to_TColgp_Array1OfPnt(li):
-    pts = TColgp_Array1OfPnt(1, len(li) + 1)
+    pts = TColgp_Array1OfPnt(1, len(li))
     for n, i in enumerate(li):
         pts.SetValue(n + 1, i)
     return pts
@@ -66,9 +66,10 @@ xt4 = mymath.math_rez(D, r_min, 25, gamma, alpha)
 xt5 = mymath.math_rez(D, r_min, 28.5, gamma, alpha)
 xt6 = mymath.math_rez(D, r_min, 35, gamma, alpha)
 
-curve = points_to_bspline(
+bspline_1 = points_to_bspline(
     [gp_Pnt(20, xt2, 0), gp_Pnt(27, xt3, 0), gp_Pnt(39.4, xt4, 0), gp_Pnt(52.4, xt5, 0), gp_Pnt(60, xt6, 0)])
-edge = BRepBuilderAPI_MakeEdge(curve)
+
+edge = BRepBuilderAPI_MakeEdge(bspline_1)
 wire = BRepBuilderAPI_MakeWire(edge.Edge())
 mkWire.Add(wire.Wire())
 
