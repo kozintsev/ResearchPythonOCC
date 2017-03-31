@@ -35,12 +35,15 @@ def make_cut_cylinder(share, points):
         x = p[0]
         y = p[1]
         z = p[2]
+        R = p[3]
+        H = p[4]
         pnt = gp_Pnt(x, y, z)
+        dr = gp_Dir(1.0, 0.0, 0.0)
+        ax = gp_Ax1(pnt, dr)
+        #my_cyl = BRepPrimAPI_MakeCylinder(ax, R, H)
+        #share = BRepAlgo_Cut(shape, my_cyl)
 
-    my_cyl = BRepPrimAPI_MakeCylinder(1., 2.)
-    # BRepAlgo_Cut(share, my_cyl)
-
-    return my_cyl
+    return share
 
 
 r_max = 35
