@@ -8,7 +8,7 @@ from OCC.BRepPrimAPI import *
 from OCC.Display.SimpleGui import init_display
 from OCC.GeomAPI import GeomAPI_PointsToBSpline
 from OCC.TColgp import TColgp_Array1OfPnt
-from OCC.gp import gp_Pnt, gp_Ax1, gp_Dir, gp_Vec
+from OCC.gp import gp_Pnt, gp_Ax1, gp_Ax2, gp_Dir, gp_Vec
 
 display, start_display, add_menu, add_function_to_menu = init_display()
 
@@ -30,7 +30,8 @@ def points_to_bspline(pnts):
     return crv.Curve()
 
 
-def make_cut_cylinder(share, points):
+def make_cut_cylinder(shape, points):
+    is_first = True
     for p in points:
         x = p[0]
         y = p[1]
@@ -39,11 +40,15 @@ def make_cut_cylinder(share, points):
         H = p[4]
         pnt = gp_Pnt(x, y, z)
         dr = gp_Dir(1.0, 0.0, 0.0)
-        ax = gp_Ax1(pnt, dr)
-        #my_cyl = BRepPrimAPI_MakeCylinder(ax, R, H)
-        #share = BRepAlgo_Cut(shape, my_cyl)
+        ax = gp_Ax2(pnt, dr)
+        my_cyl = BRepPrimAPI_MakeCylinder(ax, R, H).Shape()
+        if is_first:
+            shape1 = BRepAlgo_Cut(shape, my_cyl)
+            is_first = False
+        else:
+            shape1 = BRepAlgo_Cut(shape1.Shape(), my_cyl)
 
-    return share
+    return shape1
 
 
 r_max = 35
@@ -135,8 +140,9 @@ Z = 14 * math.cos(math.pi / 6)
 Y = 14 * math.sin(math.pi / 6)
 # производим вырез 7 отверстий в резце
 # координаты, радиус, глубина выдавливания
-shape = make_cut_cylinder(result_solid, [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100), (0, Y, -Z, 4, 100),
-                                         (0, -Y, -Z, 4, 100), (0, Y, Z, 4, 100), (0, -Y, Z, 4, 100)])
+shape = make_cut_cylinder(result_solid.Shape(), [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100),
+                                                 (0, Y, -Z, 4, 100),  (0, -Y, -Z, 4, 100),
+                                                 (0, Y, Z, 4, 100),   (0, -Y, Z, 4, 100)])
 
-display.DisplayShape(result_solid.Shape(), update=True)
+display.DisplayShape(shape.Shape(), update=True)
 start_display()
