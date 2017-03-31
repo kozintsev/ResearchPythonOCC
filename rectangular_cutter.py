@@ -31,7 +31,6 @@ def points_to_bspline(pnts):
 
 
 def make_cut_cylinder(shape, points):
-    is_first = True
     for p in points:
         x = p[0]
         y = p[1]
@@ -42,13 +41,9 @@ def make_cut_cylinder(shape, points):
         dr = gp_Dir(1.0, 0.0, 0.0)
         ax = gp_Ax2(pnt, dr)
         my_cyl = BRepPrimAPI_MakeCylinder(ax, R, H).Shape()
-        if is_first:
-            shape1 = BRepAlgo_Cut(shape, my_cyl)
-            is_first = False
-        else:
-            shape1 = BRepAlgo_Cut(shape1.Shape(), my_cyl)
+        shape = BRepAlgo_Cut(shape.Shape(), my_cyl)
 
-    return shape1
+    return shape
 
 
 r_max = 35
@@ -80,10 +75,6 @@ bspline_1 = points_to_bspline(
 edge = BRepBuilderAPI_MakeEdge(bspline_1)
 wire = BRepBuilderAPI_MakeWire(edge.Edge())
 mkWire.Add(wire.Wire())
-
-# edge = BRepBuilderAPI_MakeEdge(gp_Pnt(20, xt2, 0), gp_Pnt(60, xt6, 0))
-# wire = BRepBuilderAPI_MakeWire(edge.Edge())
-# mkWire.Add(wire.Wire())
 
 edge = BRepBuilderAPI_MakeEdge(gp_Pnt(60, xt6, 0), gp_Pnt(80, xt6, 0))
 wire = BRepBuilderAPI_MakeWire(edge.Edge())
@@ -140,7 +131,7 @@ Z = 14 * math.cos(math.pi / 6)
 Y = 14 * math.sin(math.pi / 6)
 # производим вырез 7 отверстий в резце
 # координаты, радиус, глубина выдавливания
-shape = make_cut_cylinder(result_solid.Shape(), [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100),
+shape = make_cut_cylinder(result_solid, [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100),
                                                  (0, Y, -Z, 4, 100),  (0, -Y, -Z, 4, 100),
                                                  (0, Y, Z, 4, 100),   (0, -Y, Z, 4, 100)])
 
