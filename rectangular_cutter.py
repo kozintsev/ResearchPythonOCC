@@ -30,7 +30,7 @@ def points_to_bspline(pnts):
     return crv.Curve()
 
 
-def make_cut_cylinder(shape, points):
+def make_cut_cylinder(solid, points):
     for p in points:
         x = p[0]
         y = p[1]
@@ -41,9 +41,9 @@ def make_cut_cylinder(shape, points):
         dr = gp_Dir(1.0, 0.0, 0.0)
         ax = gp_Ax2(pnt, dr)
         my_cyl = BRepPrimAPI_MakeCylinder(ax, R, H).Shape()
-        shape = BRepAlgo_Cut(shape.Shape(), my_cyl)
+        solid = BRepAlgo_Cut(solid.Shape(), my_cyl)
 
-    return shape
+    return solid
 
 
 r_max = 35
@@ -132,8 +132,8 @@ Y = 14 * math.sin(math.pi / 6)
 # производим вырез 7 отверстий в резце
 # координаты, радиус, глубина выдавливания
 shape = make_cut_cylinder(result_solid, [(0, 0, 0, 8, 30), (0, 14, 0, 4, 100), (0, -14, 0, 4, 100),
-                                                 (0, Y, -Z, 4, 100),  (0, -Y, -Z, 4, 100),
-                                                 (0, Y, Z, 4, 100),   (0, -Y, Z, 4, 100)])
+                                         (0, Y, -Z, 4, 100), (0, -Y, -Z, 4, 100),
+                                         (0, Y, Z, 4, 100), (0, -Y, Z, 4, 100)])
 
 display.DisplayShape(shape.Shape(), update=True)
 start_display()
