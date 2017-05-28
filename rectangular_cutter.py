@@ -23,7 +23,7 @@ def point_list_to_TColgp_Array1OfPnt(li):
 def points_to_bspline(pnts):
     """
     Построение сплайна по точками
-    :type pnts: object
+    :type pnts: список точек для создания сплайна
     """
     pts = point_list_to_TColgp_Array1OfPnt(pnts)
     crv = GeomAPI_PointsToBSpline(pts)
@@ -31,6 +31,11 @@ def points_to_bspline(pnts):
 
 
 def make_cut_cylinder(solid, points):
+    """
+    :param solid: тело в котором вырежаем цилиндр
+    :param points: массив точек x, y, z, R, H 
+    :return: 
+    """
     for p in points:
         x = p[0]
         y = p[1]
